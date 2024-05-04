@@ -3,6 +3,8 @@ import Cards from "./Card";
 
 const Hero = () => {
 
+    const [info, setinfo] = useState([])
+
  //function to fetch data from API   
  async function fetchData() {
     const myHeaders = new Headers();
@@ -27,23 +29,24 @@ const Hero = () => {
       .catch((error) => console.error(error));
   }
 
-  useEffect(() => {
-    async function fetchDataAndLogResponse() {
-      try {
-        const response = await fetchData();
-        console.log(response);
-      } catch (error) {
-        console.error('Error fetching data:', error);
-      }
-    }
-    fetchDataAndLogResponse();
-  }, []); // Empty dependency array ensures useEffect runs only once on mount
+//   useEffect(() => {
+//     async function fetchDataAndLogResponse() {
+//       try {
+//         const response = await fetchData();
+//         console.log(response);
+//         setinfo(response.jdList)
+//       } catch (error) {
+//         console.error('Error fetching data:', error);
+//       }
+//     }
+//     fetchDataAndLogResponse();
+//   }, []); // Empty dependency array ensures useEffect runs only once on mount
   
 
   return (
-    <div>
+    <div style={{margin:'100px'}}>
       Hero
-      <Cards />
+      <Cards  />
     </div>
   );
 };
