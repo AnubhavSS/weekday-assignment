@@ -1,4 +1,4 @@
-import React from "react";
+import React,{useState} from "react";
 import {
   Box,
   Avatar,
@@ -8,11 +8,15 @@ import {
   CardContent,
   Typography,
   Stack,
+  Collapse
 } from "@mui/material";
 import BoltIcon from "@mui/icons-material/Bolt";
 import CheckBoxIcon from "@mui/icons-material/CheckBox";
+
+
 const Cards = ({ data }) => {
   console.log(data);
+  const [showMore, setshowMore] = useState(false)
   return (
     <Card
       sx={{ maxWidth: 345 }}
@@ -33,15 +37,15 @@ const Cards = ({ data }) => {
         ></Avatar>
         <Stack gap={1}>
           {/* Company Name */}
-          <Typography variant="body2" color={"gray"}>
+          <Typography variant="body2" color={"gray"} textTransform={'capitalize'}>
             {data?.companyName}
           </Typography>
 
           {/* Job Role */}
-          <Typography variant="subtitle1">{data?.jobRole}</Typography>
+          <Typography variant="subtitle1" textTransform={'capitalize'}>{data?.jobRole}</Typography>
 
           {/* Location */}
-          <Typography variant="caption" display="block" fontWeight={600}>
+          <Typography variant="caption" display="block" fontWeight={600} textTransform={'capitalize'}>
             {data?.location}
           </Typography>
         </Stack>
@@ -72,22 +76,27 @@ const Cards = ({ data }) => {
         <Typography variant="h6" component="div" fontWeight={600} fontSize={15}>
           Job Description:
         </Typography>
+
+{/* Expanding to show more info */}
+        <Collapse in={showMore} collapsedSize={70}>
         <Typography variant="body1">{data?.jobDetailsFromCompany}</Typography>
+        </Collapse>
+
       </CardContent>
-      <CardActions>
+      <CardActions style={{display:'grid',placeItems:'center'}}>
         <Button
           variant="text"
           size="small"
-          style={{ marginLeft: 120, textTransform: "capitalize", color:'purple' }}
+          style={{  textTransform: "capitalize", color:'purple' }}
+          onClick={()=>setshowMore((prev)=>!prev)}
         >
           View Job
         </Button>
       </CardActions>
 <Stack marginLeft={2}>
       <Typography
-        
         color={"gray"}
-        fontSize={14}
+        sx={{fontSize:{xs:12,md:14}}}
         fontWeight={600}
       >
       Minimum Experience
@@ -115,7 +124,7 @@ const Cards = ({ data }) => {
       >
         Easy Apply
       </Button>
-      
+
       <Button
        sx={{fontSize:{xs:10,md:15}}}
         variant="contained"
