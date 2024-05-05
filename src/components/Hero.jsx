@@ -1,40 +1,20 @@
 import React, { useEffect, useState } from "react";
 import Cards from "./Card";
-import { Grid,Skeleton } from "@mui/material";
+import { Grid, Skeleton } from "@mui/material";
+import Filters from "./Filters";
+import { fetchData } from "../../service";
+
 const Hero = () => {
   const [info, setinfo] = useState([]);
+  const [jobs, setjobs] = useState([]);
   const [offset, setoffset] = useState(0);
   const [loading, setloading] = useState(true);
-  //function to fetch data from API
-  async function fetchData() {
-    const myHeaders = new Headers();
-    myHeaders.append("Content-Type", "application/json");
-    const body = JSON.stringify({
-      limit: 10,
-      offset: offset,
-    });
 
-    const requestOptions = {
-      method: "POST",
-      headers: myHeaders,
-      body,
-    };
-
-    return (
-      fetch(
-        "https://api.weekday.technology/adhoc/getSampleJdJSON",
-        requestOptions
-      )
-        .then((response) => response.text())
-        //   .then((result) => console.log(result))
-        .catch((error) => console.error(error))
-    );
-  }
-
+  //getting the data
   useEffect(() => {
     async function fetchDataAndLogResponse() {
       try {
-        const res = await fetchData();
+        const res = await fetchData(offset);
         const response = JSON.parse(res);
         // console.log(response);
         setinfo((prev) => [...prev, ...response.jdList]);
@@ -46,6 +26,7 @@ const Hero = () => {
     fetchDataAndLogResponse();
   }, [offset]); // Empty dependency array ensures useEffect runs only once on mount
 
+  //logic for infinite scroll
   const handleScroll = () => {
     const { scrollTop, clientHeight, scrollHeight } = document.documentElement;
 
@@ -60,9 +41,24 @@ const Hero = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  //handling filters
+  const filterOptions = (val) => {
+    const filteredArray = info.filter((item) => {
+      return (
+        item.minExp >= (val?.minExp || 0) 
+        // (val?.location.toLowerCase() === "remote")
+        //   ? item.location && item.location.toLowerCase() === "remote"
+        //   : item.location !== "Remote" && item.location !== null)
+      );
+    });
+
+    console.log(val,filteredArray);
+    setinfo(filteredArray);
+  };
+
   return (
     <div style={{ margin: "100px" }}>
-      Hero
+      <Filters filterOptions={filterOptions} />
       <Grid container spacing={{ xs: 2, md: 3 }}>
         {info &&
           info.map((item, index) => {
@@ -74,11 +70,11 @@ const Hero = () => {
           })}
       </Grid>
       {loading && (
-          <div style={{ display: "grid", placeItems: "center" }}>
-            {" "}
-            <Skeleton variant="circular" width={40} height={40} />
-          </div>
-        )}
+        <div style={{ display: "grid", placeItems: "center" }}>
+          {" "}
+          <Skeleton variant="circular" width={40} height={40} />
+        </div>
+      )}
     </div>
   );
 };

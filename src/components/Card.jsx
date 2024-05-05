@@ -12,16 +12,15 @@ import {
 } from "@mui/material";
 import BoltIcon from "@mui/icons-material/Bolt";
 import CheckBoxIcon from "@mui/icons-material/CheckBox";
-
+import man from '../assets/man.png'
 
 const Cards = ({ data }) => {
-  console.log(data);
+ 
   const [showMore, setshowMore] = useState(false)
   return (
     <Card
-      sx={{ maxWidth: 345 }}
-      style={{ borderWidth: 10, borderColor: "gray" }}
-    >
+      sx={{ width:{xs:'50vw',md:'25vw'}}}
+          >
       {/* Card top section */}
       <Box
         display={"flex"}
@@ -131,7 +130,7 @@ const Cards = ({ data }) => {
         startIcon={
           <Avatar
             alt="Remy Sharp"
-            src="/static/images/avatar/1.jpg"
+            src={man}
             sx={{ width:{xs:20, md:24},  height:{xs:20, md:24},}}
           />
         }
