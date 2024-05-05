@@ -44,9 +44,11 @@ const Hero = () => {
   //handling filters
   const filterOptions = (val) => {
     const filteredArray = info.filter((item) => {
+        
       return (
-        item.minExp >= (val?.minExp || 0) 
-        // (val?.location.toLowerCase() === "remote")
+         item.minExp >= (val?.minExp || 0) 
+        //  (val?.location === "Remote"? item.location==='remote':item.location!=='remote') &&
+        // && (val?.jobRole?.toLowerCase()===item.jobRole.toLowerCase())
         //   ? item.location && item.location.toLowerCase() === "remote"
         //   : item.location !== "Remote" && item.location !== null)
       );

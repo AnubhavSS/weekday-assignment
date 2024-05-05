@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { Autocomplete, TextField, Stack } from "@mui/material";
-import { Experience, BasePay, Location } from "../../data";
+import { Experience, BasePay, Location, JobRole } from "../../data";
 const Filters = ({ filterOptions }) => {
-  const [filters, setFilters] = useState({});
+  const [filters, setFilters] = useState({
+    companyName: "",
+  });
 
   useEffect(() => {
     // This effect will execute whenever filters state changes
@@ -21,7 +23,7 @@ const Filters = ({ filterOptions }) => {
 
   return (
     <div>
-      <Stack flexWrap={"wrap"} flexDirection={"row"} gap={1}>
+      <Stack flexWrap={"wrap"} flexDirection={"row"} gap={1} marginBottom={4}>
         {/* Experience  */}
         <Autocomplete
           id="minExp"
@@ -37,7 +39,7 @@ const Filters = ({ filterOptions }) => {
           id="minJdSalary"
           disablePortal
           options={BasePay}
-          sx={{ width: 200 }}
+          sx={{ width: 250 }}
           renderInput={(params) => (
             <TextField {...params} label="Minimum Base Pay Salary" />
           )}
@@ -55,6 +57,28 @@ const Filters = ({ filterOptions }) => {
           renderInput={(params) => <TextField {...params} label="Location" />}
           onSelect={(selectedOption) =>
             handleSelect(selectedOption, "location")
+          }
+        />
+
+        {/* Job Role */}
+        <Autocomplete
+          id="jobRole"
+          options={JobRole}
+          groupBy={(option) => option.category}
+          getOptionLabel={(option) => option.label}
+          sx={{ width: 200 }}
+          renderInput={(params) => <TextField {...params} label="Roles" />}
+          onSelect={(selectedOption) => handleSelect(selectedOption, "jobRole")}
+        />
+
+        {/* Company Name */}
+        <TextField
+          id="companyName"
+          label="Company Name"
+          variant="outlined"
+          value={filters.companyName}
+          onChange={(e) =>
+            setFilters({ ...filters, companyName: e.target.value })
           }
         />
       </Stack>

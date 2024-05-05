@@ -19,7 +19,7 @@ const Cards = ({ data }) => {
   const [showMore, setshowMore] = useState(false)
   return (
     <Card
-      sx={{ width:{xs:'50vw',md:'25vw'}}}
+      sx={{ width:{xs:'50vw',md:'25vw',padding:2,borderRadius:'20px',border:'1px solid #C0C4C0'}}}
           >
       {/* Card top section */}
       <Box
