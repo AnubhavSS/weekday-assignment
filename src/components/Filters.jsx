@@ -1,11 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { Autocomplete, TextField, Stack } from "@mui/material";
 import { Experience, BasePay, Location, JobRole } from "../../data";
+import { increment } from "../filterSlice";
+import { useDispatch } from "react-redux";
 const Filters = ({ filterOptions }) => {
   const [filters, setFilters] = useState({
     companyName: "",
+ 
   });
-
+  const dispatch = useDispatch()
   useEffect(() => {
     // This effect will execute whenever filters state changes
     filterOptions(filters);
@@ -19,6 +22,7 @@ const Filters = ({ filterOptions }) => {
       ...prevFilters,
       [id]: selectedValue,
     }));
+    dispatch(increment({...filters,[id]:selectedValue}))
   };
 
   return (
@@ -77,9 +81,10 @@ const Filters = ({ filterOptions }) => {
           label="Company Name"
           variant="outlined"
           value={filters.companyName}
-          onChange={(e) =>
-            setFilters({ ...filters, companyName: e.target.value })
-          }
+          onChange={(e) =>{
+            dispatch(increment({...filters,companyName:e.target.value}));
+        setFilters({...filters,companyName:e.target.value})
+          }}
         />
       </Stack>
     </div>

@@ -3,13 +3,14 @@ import Cards from "./Card";
 import { Grid, Skeleton } from "@mui/material";
 import Filters from "./Filters";
 import { fetchData } from "../../service";
-
+import { useSelector } from "react-redux";
 const Hero = () => {
   const [info, setinfo] = useState([]);
   const [jobs, setjobs] = useState([]);
   const [offset, setoffset] = useState(0);
   const [loading, setloading] = useState(true);
-
+  const val = useSelector((state) => state.filter)
+  
   //getting the data
   useEffect(() => {
     async function fetchDataAndLogResponse() {
@@ -19,13 +20,12 @@ const Hero = () => {
         // console.log(response);
         setinfo((prev) => [...prev, ...response.jdList]);
         setloading(false);
-        setjobs((prev) => [...prev, ...response.jdList])
       } catch (error) {
         console.error("Error fetching data:", error);
       }
     }
     fetchDataAndLogResponse();
-  }, [offset]); // Empty dependency array ensures useEffect runs only once on mount
+  }, [offset]); 
 
   //logic for infinite scroll
   const handleScroll = () => {
@@ -43,25 +43,27 @@ const Hero = () => {
   }, []);
 
   //handling filters
-  const filterOptions = useCallback((val) => {
+ 
+  const filterOptions = () => {
+    
     const filteredArray = info.filter((item) => {
-      
+      //conditions for filtering
       return (
-         item.minExp >= (val?.minExp || 0) 
-        //   && (val?.location === "Remote"? item.location.toLowerCase()==='remote':item.location.toLowerCase()!=='remote') 
-        //    &&(val?.companyName.toLowerCase()!='' && item.companyName.toLowerCase().includes(val?.companyName.toLowerCase()))
-        //    && (val?.jobRole?.toLowerCase()===item.jobRole.toLowerCase())
+          item.minExp >= (val?.minExp || 0) 
+            && (val?.location === "Remote"? item.location.toLowerCase()==='remote':item.location.toLowerCase()!=='remote') 
+           && (!val?.companyName || item.companyName.toLowerCase().includes(val?.companyName.toLowerCase()))
+           &&  (!val?.jobRole || val?.jobRole.toLowerCase() === item.jobRole.toLowerCase()) // Only apply this condition if val.jobRole exists
  
       );
     });
 
-    console.log(val,filteredArray);
+    // console.log(val,filteredArray);
     setjobs(filteredArray);
-  },[info]);
+  };
 
-//   useEffect(() => {
-//    filterOptions()
-//   }, [info,setinfo])
+  useEffect(() => {
+   filterOptions()
+  }, [info,val])
   
 
   return (
