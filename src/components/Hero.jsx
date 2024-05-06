@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import Cards from "./Card";
 import { Grid, Skeleton } from "@mui/material";
 import Filters from "./Filters";
@@ -19,6 +19,7 @@ const Hero = () => {
         // console.log(response);
         setinfo((prev) => [...prev, ...response.jdList]);
         setloading(false);
+        setjobs((prev) => [...prev, ...response.jdList])
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -42,28 +43,33 @@ const Hero = () => {
   }, []);
 
   //handling filters
-  const filterOptions = (val) => {
+  const filterOptions = useCallback((val) => {
     const filteredArray = info.filter((item) => {
-        
+      
       return (
          item.minExp >= (val?.minExp || 0) 
-        //  (val?.location === "Remote"? item.location==='remote':item.location!=='remote') &&
-        // && (val?.jobRole?.toLowerCase()===item.jobRole.toLowerCase())
-        //   ? item.location && item.location.toLowerCase() === "remote"
-        //   : item.location !== "Remote" && item.location !== null)
+        //   && (val?.location === "Remote"? item.location.toLowerCase()==='remote':item.location.toLowerCase()!=='remote') 
+        //    &&(val?.companyName.toLowerCase()!='' && item.companyName.toLowerCase().includes(val?.companyName.toLowerCase()))
+        //    && (val?.jobRole?.toLowerCase()===item.jobRole.toLowerCase())
+ 
       );
     });
 
     console.log(val,filteredArray);
-    setinfo(filteredArray);
-  };
+    setjobs(filteredArray);
+  },[info]);
+
+//   useEffect(() => {
+//    filterOptions()
+//   }, [info,setinfo])
+  
 
   return (
     <div style={{ margin: "100px" }}>
       <Filters filterOptions={filterOptions} />
       <Grid container spacing={{ xs: 2, md: 3 }}>
-        {info &&
-          info.map((item, index) => {
+        {jobs &&
+          jobs.map((item, index) => {
             return (
               <Grid item xs={12} md={4} key={index}>
                 <Cards key={index} data={item} />

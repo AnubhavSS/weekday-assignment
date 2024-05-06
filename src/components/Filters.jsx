@@ -12,8 +12,8 @@ const Filters = ({ filterOptions }) => {
   }, [filters]); // This dependency array ensures that the effect runs whenever filters state changes
 
   const handleSelect = (selectedOption, id) => {
-    const selectedValue = selectedOption?.target?.value;
-
+    
+    const selectedValue = selectedOption?.target?.innerText;
     // Update the filters state based on the id of the Autocomplete component
     setFilters((prevFilters) => ({
       ...prevFilters,
@@ -31,7 +31,7 @@ const Filters = ({ filterOptions }) => {
           options={Experience}
           sx={{ width: 130 }}
           renderInput={(params) => <TextField {...params} label="Experience" />}
-          onSelect={(selectedOption) => handleSelect(selectedOption, "minExp")}
+          onChange={(selectedOption) => handleSelect(selectedOption, "minExp")}
         />
 
         {/* Base Pay */}
@@ -43,9 +43,9 @@ const Filters = ({ filterOptions }) => {
           renderInput={(params) => (
             <TextField {...params} label="Minimum Base Pay Salary" />
           )}
-          onSelect={(selectedOption) =>
-            handleSelect(selectedOption, "minJdSalary")
-          }
+        //   onChange={(selectedOption) =>
+        //     handleSelect(selectedOption, "minJdSalary")
+        //   }
         />
 
         {/* Location */}
@@ -55,7 +55,7 @@ const Filters = ({ filterOptions }) => {
           options={Location}
           sx={{ width: 150 }}
           renderInput={(params) => <TextField {...params} label="Location" />}
-          onSelect={(selectedOption) =>
+          onChange={(selectedOption) =>
             handleSelect(selectedOption, "location")
           }
         />
@@ -68,7 +68,7 @@ const Filters = ({ filterOptions }) => {
           getOptionLabel={(option) => option.label}
           sx={{ width: 200 }}
           renderInput={(params) => <TextField {...params} label="Roles" />}
-          onSelect={(selectedOption) => handleSelect(selectedOption, "jobRole")}
+          onChange={(selectedOption) => handleSelect(selectedOption, "jobRole")}
         />
 
         {/* Company Name */}
